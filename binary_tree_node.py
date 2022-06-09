@@ -33,15 +33,6 @@ class Node:
         if self.data.measurement_limit_minimum >= measurement_minimum:
             print(self.data)
 
-    def min_value(self):
-        current = self
-        pre_current = None
-        while current and current.left:
-            pre_current = current
-            current = current.left
-
-        return current, pre_current
-
     def delete_by_graduation_year(self, graduation_year):
         if self.left:
             self.left = self.left.delete_by_graduation_year(graduation_year)
@@ -49,23 +40,12 @@ class Node:
             self.right = self.right.delete_by_graduation_year(graduation_year)
         if self.data.graduation_year == graduation_year:
 
-            if not self.left and not self.right:  # no child
-                return None
-            elif not self.left:  # only right child
+            if not self.left:
+                del self.left
                 return self.right
-            elif not self.right:  # only left child
+            elif not self.right:
+                del self.right
                 return self.left
-
-            # has 2 child
-            temp, recurrent = self.right.minValue()
-            if recurrent:
-                if temp.right:
-                    recurrent.left = temp.right
-                else:
-                    recurrent.left = None
-            else:
-                self.right = temp.right
-            self.data = temp.data
 
         return self
 
